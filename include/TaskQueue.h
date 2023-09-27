@@ -36,7 +36,7 @@ public:
     Task takeTask();
 
     // 获取任务数量
-    inline int getTaskNum(){
+    inline size_t getTaskNum(){
         return m_taskQ.size();
     }
 
