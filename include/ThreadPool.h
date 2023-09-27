@@ -1,6 +1,9 @@
 #pragma once
-#include "TaskQueue.h"
 
+#include "TaskQueue.h"
+#include "TaskQueue.cpp"
+
+template <typename T>
 class ThreadPool
 {
 public:
@@ -10,7 +13,7 @@ public:
     ~ThreadPool();
 
     // 添加任务
-    void addTask(Task& task);
+    void addTask(Task<T> task);
     void addTask(callback f, void* arg);
 
     // 获取线程池中忙线程的数量
@@ -24,7 +27,7 @@ private:
     void threadExit();              //线程退出
 
 private:
-    TaskQueue* taskQ;               //任务队列
+    TaskQueue<T>* taskQ;               //任务队列
 
     pthread_t managerID;            //管理者线程ID
     pthread_t* threadIDs;           //工作线程ID

@@ -3,13 +3,14 @@
 #include <string.h>
 #include <string>
 #include <unistd.h>
+
 #include "ThreadPool.h"
 
-ThreadPool::ThreadPool(int min, int max){
+template <typename T>
+ThreadPool<T>::ThreadPool(int min, int max){
     // 实例化任务队列
-
     do{
-        taskQ = new TaskQueue;
+        taskQ = new TaskQueue<T>;
         if (taskQ == nullptr){
             std::cout << "malloc taskQ fail" << std::endl;
             break;
@@ -51,10 +52,8 @@ ThreadPool::ThreadPool(int min, int max){
     if (taskQ) delete taskQ;                         // 释放任务队列
 }
 
-
-
-
-ThreadPool::~ThreadPool(){
+template <typename T>
+ThreadPool<T>::~ThreadPool(){
     shutdown = true;                         // 关闭线程池
     pthread_join(managerID, NULL);        // 阻塞回收管理者线程
 
@@ -71,7 +70,8 @@ ThreadPool::~ThreadPool(){
     pthread_cond_destroy(&notEmpty);    // 销毁条件变量
 }
 
-void ThreadPool::addTask(Task& task){
+template <typename T>
+void ThreadPool<T>::addTask(Task<T> task){
     if (shutdown) return;
     
     // 添加任务
@@ -81,21 +81,24 @@ void ThreadPool::addTask(Task& task){
     pthread_cond_signal(&notEmpty);     // 唤醒工作线程
 }
 
-int ThreadPool::getAliveNum(){
+template <typename T>
+int ThreadPool<T>::getAliveNum(){
     pthread_mutex_lock(&mutexPool);   // 给线程池加锁
     int aliveNum = this->liveNum;
     pthread_mutex_unlock(&mutexPool); // 给线程池解锁
     return aliveNum;
 }
 
-int ThreadPool::getBusyNum(){
+template <typename T>
+int ThreadPool<T>::getBusyNum(){
     pthread_mutex_lock(&mutexPool);   // 给线程池加锁
     int busyNum = this->busyNum;
     pthread_mutex_unlock(&mutexPool); // 给线程池解锁
     return busyNum;
 }
 
-void* ThreadPool::worker(void *arg){
+template <typename T>
+void* ThreadPool<T>::worker(void *arg){
     ThreadPool *pool = static_cast<ThreadPool*>(arg);       // 获取线程池地址
 
     while (true)
@@ -124,7 +127,7 @@ void* ThreadPool::worker(void *arg){
         }
 
         // 从任务队列中取出一个任务
-        Task task = pool->taskQ->takeTask();
+        Task<T> task = pool->taskQ->takeTask();
 
         pool->busyNum++; // 忙线程数加1
         pthread_mutex_unlock(&(pool->mutexPool));   // 给线程池解锁
@@ -144,7 +147,8 @@ void* ThreadPool::worker(void *arg){
     return NULL;
 }
 
-void* ThreadPool::manager(void* arg){
+template <typename T>
+void* ThreadPool<T>::manager(void* arg){
     ThreadPool *pool = static_cast<ThreadPool*>(arg);           // 获取线程池地址
     while (!pool->shutdown)
     {
@@ -192,7 +196,8 @@ void* ThreadPool::manager(void* arg){
     return NULL;
 }
 
-void ThreadPool::threadExit(){
+template <typename T>
+void ThreadPool<T>::threadExit(){
     pthread_t tid = pthread_self(); // 获取当前线程ID
     for (int i = 0; i < maxNum; ++i)
     {
