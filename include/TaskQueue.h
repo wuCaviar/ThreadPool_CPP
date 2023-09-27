@@ -1,4 +1,3 @@
-#pragma once
 #include <queue>
 #include <pthread.h>
 

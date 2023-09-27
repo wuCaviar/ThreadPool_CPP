@@ -135,7 +135,8 @@ void* ThreadPool<T>::worker(void *arg){
         std::cout << "thread" << std::to_string(pthread_self()) << "start working..." << std::endl;    //开始工作
 
         task.func(task.arg);                    // 执行任务函数
-        delete task.arg;                         //传入堆空间的地址，需要手动释放
+        T* arg = static_cast<T*>(task.arg);
+        delete arg;                         //传入堆空间的地址，需要手动释放
         task.arg = nullptr;                            //防止野指针
 
         std::cout << "thread" << std::to_string(pthread_self()) << "end working..." << std::endl;   //结束工作

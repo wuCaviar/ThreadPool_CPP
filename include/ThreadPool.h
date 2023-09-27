@@ -1,7 +1,5 @@
-#pragma once
-
-#include "TaskQueue.h"
-#include "src/TaskQueue.cpp"
+//#include "TaskQueue.h"
+#include "TaskQueue.cpp"
 
 template <typename T>
 class ThreadPool
@@ -14,7 +12,6 @@ public:
 
     // 添加任务
     void addTask(Task<T> task);
-    void addTask(callback f, void* arg);
 
     // 获取线程池中忙线程的数量
     int getBusyNum();

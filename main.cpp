@@ -1,8 +1,8 @@
 #include <unistd.h>
 #include <iostream>
 
-#include "include/ThreadPool.h"
-#include "src/ThreadPool.cpp"
+// #include "ThreadPool.h"
+#include "ThreadPool.cpp"
 
 void taskFunc(void* arg){
     int num = *(int*)arg; // 任务函数中的参数是一个int型的指针，所以要先转换成int型的指针，再取值
@@ -18,8 +18,6 @@ int main(){
         int* num = new int(i + 100); // 为任务函数的参数申请空间
         pool.addTask(Task<int>(taskFunc, num)); // 添加任务
     }
-
     sleep(20); // 等待所有任务完成
-
     return 0;
 }
