@@ -19,8 +19,8 @@ public:
     int getAliveNum();
 
 private:
-    void* worker(void* arg);        //线程池中工作线程
-    void* manager();                 //线程管理者线程
+    static void* worker(void* arg);        //线程池中工作线程
+    static void* manager(void* arg);                 //线程管理者线程
     void threadExit();              //线程退出
 
 private:
@@ -37,6 +37,8 @@ private:
 
     pthread_mutex_t mutexPool;      //锁整个线程池
     pthread_cond_t notEmpty;        //任务队列空，取任务的线程阻塞
+
+    static const int NUMBER = 2;    //每次创建和销毁线程的个数
 
     bool shutdown;                   //是否要销毁线程池 1:销毁 0:不销毁    
 };
