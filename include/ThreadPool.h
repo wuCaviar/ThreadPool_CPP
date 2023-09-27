@@ -1,3 +1,4 @@
+#pragma once
 //#include "TaskQueue.h"
 #include "TaskQueue.cpp"
 
