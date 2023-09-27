@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TaskQueue.h"
-#include "TaskQueue.cpp"
+#include "src/TaskQueue.cpp"
 
 template <typename T>
 class ThreadPool

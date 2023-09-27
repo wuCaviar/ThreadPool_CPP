@@ -1,8 +1,8 @@
 #include <unistd.h>
 #include <iostream>
 
-#include "ThreadPool.h"
-#include "ThreadPool.cpp"
+#include "include/ThreadPool.h"
+#include "src/ThreadPool.cpp"
 
 void taskFunc(void* arg){
     int num = *(int*)arg; // 任务函数中的参数是一个int型的指针，所以要先转换成int型的指针，再取值
