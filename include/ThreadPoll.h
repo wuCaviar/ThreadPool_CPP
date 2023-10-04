@@ -3,13 +3,13 @@
 #include "TaskQueue.cpp"
 
 template <typename T>
-class ThreadPool
+class ThreadPoll
 {
 public:
     // 构造函数
-    ThreadPool(int min, int max);
+    ThreadPoll(int min, int max);
     // 析构函数
-    ~ThreadPool();
+    ~ThreadPoll();
 
     // 添加任务
     void addTask(Task<T> task);
